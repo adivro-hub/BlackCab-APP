@@ -3,7 +3,11 @@
     "allow": [
       "Bash(python -c \"import json; f=open\\(''C:/Users/Adrian/BlackCab_APP_Sherlock_API/BlackCab-APP/sherbook \\(1\\).json'',''r'',encoding=''utf-8''\\); data=json.load\\(f\\); print\\(type\\(data\\)\\); print\\(list\\(data.keys\\(\\)\\) if isinstance\\(data,dict\\) else f''Array of {len\\(data\\)} items''\\); f.close\\(\\)\")",
       "Bash(python -c \":*)",
-      "Bash(pip install PyPDF2)"
+      "Bash(pip install PyPDF2)",
+      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --use-npm)",
+      "Bash(npx create-next-app@latest blackcab-temp --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --use-npm)",
+      "Bash(npm install zustand date-fns date-fns-tz react-hook-form @hookform/resolvers zod lucide-react)",
+      "Bash(npx shadcn@latest init -d)"
     ]
   }
 }
