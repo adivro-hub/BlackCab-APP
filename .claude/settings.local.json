@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c \"import json; f=open\\(''C:/Users/Adrian/BlackCab_APP_Sherlock_API/BlackCab-APP/sherbook \\(1\\).json'',''r'',encoding=''utf-8''\\); data=json.load\\(f\\); print\\(type\\(data\\)\\); print\\(list\\(data.keys\\(\\)\\) if isinstance\\(data,dict\\) else f''Array of {len\\(data\\)} items''\\); f.close\\(\\)\")",
+      "Bash(python -c \":*)",
+      "Bash(pip install PyPDF2)"
+    ]
+  }
+}
