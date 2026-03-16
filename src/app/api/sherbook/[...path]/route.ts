@@ -20,19 +20,32 @@ function computeApiKeyHeader(method: string, body: string): string | null {
     return null;
   }
 
+  console.log(`[HMAC DEBUG] publicKey: "${publicKey}"`);
+  console.log(`[HMAC DEBUG] authToken length: ${authToken.length}, first5: "${authToken.substring(0, 5)}", last5: "${authToken.substring(authToken.length - 5)}"`);
+  console.log(`[HMAC DEBUG] body length: ${body.length}`);
+
   // MD5 hash of the request body
   const md5Hash = createHash("md5").update(body, "utf8").digest("hex");
+  console.log(`[HMAC DEBUG] md5Hash: ${md5Hash}`);
 
   // String to sign: "METHOD:md5hash"
   const stringToSign = `${method}:${md5Hash}`;
+  console.log(`[HMAC DEBUG] stringToSign: ${stringToSign}`);
 
   // HMAC-SHA256 with base64-decoded auth token as the key
   const keyBuffer = Buffer.from(authToken, "base64");
+  console.log(`[HMAC DEBUG] keyBuffer hex: ${keyBuffer.toString("hex")}`);
+  console.log(`[HMAC DEBUG] keyBuffer length: ${keyBuffer.length}`);
+
   const hmac = createHmac("sha256", keyBuffer)
     .update(stringToSign)
     .digest("base64");
+  console.log(`[HMAC DEBUG] hmac: ${hmac}`);
 
-  return `${publicKey}:${hmac}`.trim();
+  const result = `${publicKey}:${hmac}`.trim();
+  console.log(`[HMAC DEBUG] final header: ${result}`);
+
+  return result;
 }
 
 async function proxyRequest(
