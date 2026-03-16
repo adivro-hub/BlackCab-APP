@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { requestNewPassword } from "@/lib/api/auth";
@@ -9,17 +9,6 @@ import { Label } from "@/components/ui/label";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { Car, ArrowRight, ArrowLeft, CheckCircle2, AlertCircle } from "lucide-react";
 
-const RECAPTCHA_SITE_KEY = "6LdksrkrAAAAAJjlGLJx_xPuBU6bhfML2wlNEyfe";
-
-declare global {
-  interface Window {
-    grecaptcha: {
-      ready: (cb: () => void) => void;
-      execute: (siteKey: string, options: { action: string }) => Promise<string>;
-    };
-  }
-}
-
 export default function ForgotPasswordPage() {
   const router = useRouter();
   const [phone, setPhone] = useState("");
@@ -27,56 +16,13 @@ export default function ForgotPasswordPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  const [recaptchaReady, setRecaptchaReady] = useState(false);
-
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`;
-    script.async = true;
-    script.onload = () => {
-      window.grecaptcha.ready(() => {
-        setRecaptchaReady(true);
-        console.log("[reCAPTCHA] Ready");
-      });
-    };
-    script.onerror = () => {
-      console.error("[reCAPTCHA] Failed to load script");
-      setError("Failed to load security verification. Please refresh the page.");
-    };
-    document.head.appendChild(script);
-    return () => { document.head.removeChild(script); };
-  }, []);
-
-  const getCaptchaToken = useCallback(async (): Promise<string> => {
-    if (!window.grecaptcha) {
-      throw new Error("Security verification not loaded. Please refresh the page.");
-    }
-    return new Promise((resolve, reject) => {
-      window.grecaptcha.ready(async () => {
-        try {
-          const token = await window.grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: "password_recovery" });
-          console.log("[reCAPTCHA] Token obtained, length:", token?.length);
-          if (!token) {
-            reject(new Error("Empty captcha token received"));
-            return;
-          }
-          resolve(token);
-        } catch (err) {
-          console.error("[reCAPTCHA] Execute failed:", err);
-          reject(err);
-        }
-      });
-    });
-  }, []);
-
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     setIsLoading(true);
 
     try {
-      const captchaToken = await getCaptchaToken();
-      await requestNewPassword(phone, captchaToken);
+      await requestNewPassword(phone);
       setSuccess(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to send password");
