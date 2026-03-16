@@ -7,18 +7,14 @@ import {
   Search,
   MapPin,
   Clock,
-  Star,
-  Car,
-  Zap,
-  Users,
   Navigation,
 } from "lucide-react";
 
-const serviceTypes = [
-  { id: "standard", label: "Standard", icon: Car, eta: "3 min" },
-  { id: "comfort", label: "Comfort", icon: Star, eta: "5 min" },
-  { id: "xl", label: "XL", icon: Users, eta: "8 min" },
-  { id: "express", label: "Express", icon: Zap, eta: "1 min" },
+// TODO: Replace with real history from Sherbook API
+const recentDestinations = [
+  { id: "1", address: "Aeroportul Henri Coandă", subtitle: "Calea Bucureștilor 224E, Otopeni" },
+  { id: "2", address: "Gara de Nord", subtitle: "Piața Gării de Nord 1" },
+  { id: "3", address: "Mall Băneasa", subtitle: "Șoseaua București-Ploiești 42D" },
 ];
 
 export default function BookPage() {
@@ -28,7 +24,6 @@ export default function BookPage() {
     lat: number;
     lng: number;
   } | null>(null);
-  const [selectedService, setSelectedService] = useState("standard");
 
   const detectLocation = useCallback(() => {
     if (!navigator.geolocation) return;
@@ -61,16 +56,16 @@ export default function BookPage() {
         <Navigation className="h-4 w-4 text-zinc-700" />
       </button>
 
-      {/* Bottom sheet — compact on mobile */}
+      {/* Bottom sheet */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex flex-col justify-end md:pointer-events-auto md:relative md:inset-auto md:w-[420px] md:border-l md:border-zinc-200 md:bg-white">
-        <div className="pointer-events-auto overflow-y-auto overscroll-contain rounded-t-2xl bg-white px-4 pb-4 pt-3 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] md:max-h-none md:rounded-none md:px-5 md:pb-6 md:pt-5 md:shadow-none">
+        <div className="pointer-events-auto overflow-y-auto overscroll-contain rounded-t-2xl bg-white px-5 pb-4 pt-3 shadow-[0_-4px_20px_rgba(0,0,0,0.08)] md:max-h-none md:rounded-none md:pb-6 md:pt-5 md:shadow-none">
           {/* Drag handle */}
           <div className="mx-auto mb-3 h-1 w-8 rounded-full bg-zinc-300 md:hidden" />
 
           {/* Destination input */}
           <div className="relative">
             <div className="absolute left-4 top-1/2 -translate-y-1/2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-red-100">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-red-100">
                 <MapPin className="h-4 w-4 text-red-600" />
               </div>
             </div>
@@ -79,54 +74,43 @@ export default function BookPage() {
               placeholder="Where to?"
               value={dropoff}
               onChange={(e) => setDropoff(e.target.value)}
-              className="h-14 w-full rounded-2xl border border-zinc-200 bg-zinc-50 pl-15 pr-12 text-base font-medium outline-none transition-all placeholder:text-zinc-400 focus:border-zinc-400 focus:bg-white focus:ring-3 focus:ring-zinc-200"
+              className="h-[56px] w-full rounded-2xl border border-zinc-200 bg-zinc-50 pl-16 pr-12 text-[18px] font-medium outline-none transition-all placeholder:text-zinc-400 focus:border-zinc-400 focus:bg-white focus:ring-3 focus:ring-zinc-200"
             />
             <button className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400">
               <Search className="h-5 w-5" />
             </button>
           </div>
 
-          {/* Quick destinations */}
+          {/* Saved places */}
           <div className="mt-3 flex gap-2">
-            <button className="flex flex-1 items-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-left transition-all active:scale-[0.98]">
+            <button className="flex flex-1 items-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2.5 text-left transition-all active:scale-[0.98]">
               <span className="text-sm">🏠</span>
               <span className="text-xs font-medium text-zinc-700">Home</span>
             </button>
-            <button className="flex flex-1 items-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-left transition-all active:scale-[0.98]">
+            <button className="flex flex-1 items-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2.5 text-left transition-all active:scale-[0.98]">
               <span className="text-sm">💼</span>
               <span className="text-xs font-medium text-zinc-700">Work</span>
             </button>
           </div>
 
-          {/* Service types — horizontal scroll on mobile */}
+          {/* Recent destinations */}
           <div className="mt-4">
-            <div className="flex gap-2 overflow-x-auto pb-1">
-              {serviceTypes.map((service) => {
-                const Icon = service.icon;
-                const isActive = selectedService === service.id;
-                return (
-                  <button
-                    key={service.id}
-                    onClick={() => setSelectedService(service.id)}
-                    className={`flex shrink-0 items-center gap-2 rounded-xl border px-3.5 py-2.5 transition-all active:scale-[0.97] ${
-                      isActive
-                        ? "border-zinc-900 bg-zinc-900 text-white shadow-md"
-                        : "border-zinc-200 bg-white text-zinc-700"
-                    }`}
-                  >
-                    <Icon className="h-4 w-4" />
-                    <div className="text-left">
-                      <p className="text-xs font-semibold">{service.label}</p>
-                      <p
-                        className={`text-[10px] ${isActive ? "text-zinc-300" : "text-zinc-400"}`}
-                      >
-                        <Clock className="mr-0.5 inline h-2.5 w-2.5" />
-                        {service.eta}
-                      </p>
-                    </div>
-                  </button>
-                );
-              })}
+            <div className="space-y-1">
+              {recentDestinations.map((dest) => (
+                <button
+                  key={dest.id}
+                  onClick={() => setDropoff(dest.address)}
+                  className="flex w-full items-center gap-3 rounded-xl px-2 py-2.5 text-left transition-all hover:bg-zinc-50 active:bg-zinc-100"
+                >
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-zinc-100">
+                    <Clock className="h-3.5 w-3.5 text-zinc-500" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-medium text-zinc-900">{dest.address}</p>
+                    <p className="truncate text-xs text-zinc-400">{dest.subtitle}</p>
+                  </div>
+                </button>
+              ))}
             </div>
           </div>
         </div>
