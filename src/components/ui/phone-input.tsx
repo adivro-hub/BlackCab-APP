@@ -116,7 +116,7 @@ export function PhoneInput({
           disabled={disabled}
           required={required}
           className={cn(
-            "flex-1 bg-transparent px-3 py-2.5 text-sm outline-none",
+            "flex-1 bg-transparent px-3 py-2.5 text-base outline-none md:text-sm",
             "placeholder:text-muted-foreground"
           )}
         />

@@ -28,13 +28,13 @@ function MapContent({ pickupCoords, dropoffCoords }: BookingMapProps) {
 
       const isMobile = window.innerWidth < 768;
       if (isMobile) {
-        // The bottom sheet covers ~55% of the screen.
-        // Visible map strip is the top ~45%.
-        // We want the marker centered in that strip (~22% from top).
-        // Map center is at 50%, so shift by ~28% of map height.
+        // The bottom sheet covers ~30% of the screen.
+        // Visible map strip is the top ~70%.
+        // We want the marker centered in that strip (~35% from top).
+        // Map center is at 50%, so shift by ~15% of map height.
         const mapDiv = map.getDiv();
         const mapHeight = mapDiv.offsetHeight;
-        const offsetPx = mapHeight * 0.25;
+        const offsetPx = mapHeight * 0.15;
 
         // Project, shift, un-project
         const projection = map.getProjection();
