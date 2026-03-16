@@ -1,6 +1,39 @@
 import { NextRequest, NextResponse } from "next/server";
+import { createHash, createHmac } from "crypto";
 
-const SHERBOOK_BASE = process.env.SHERBOOK_API_URL || "https://beirut-master.sherlock.com/sherbook";
+const SHERBOOK_BASE =
+  process.env.SHERBOOK_API_URL || "https://beirut-master.sherlock.com/sherbook";
+
+// Paths that require X-API-Key HMAC signing
+const SIGNED_PATHS = [
+  "registration/new",
+  "registration/password",
+  "registration/password/callback",
+];
+
+function computeApiKeyHeader(method: string, body: string): string | null {
+  const publicKey = process.env.SHERBOOK_API_PUBLIC_KEY;
+  const authToken = process.env.SHERBOOK_API_AUTH_TOKEN;
+
+  if (!publicKey || !authToken) {
+    console.warn("[Sherbook Proxy] Missing API key credentials");
+    return null;
+  }
+
+  // MD5 hash of the request body
+  const md5Hash = createHash("md5").update(body, "utf8").digest("hex");
+
+  // String to sign: "METHOD:md5hash"
+  const stringToSign = `${method}:${md5Hash}`;
+
+  // HMAC-SHA256 with base64-decoded auth token as the key
+  const keyBuffer = Buffer.from(authToken, "base64");
+  const hmac = createHmac("sha256", keyBuffer)
+    .update(stringToSign)
+    .digest("base64");
+
+  return `${publicKey}:${hmac}`.trim();
+}
 
 async function proxyRequest(
   request: NextRequest,
@@ -29,21 +62,32 @@ async function proxyRequest(
     headers["Cookie"] = `JSESSIONID=${jsessionId}`;
   }
 
+  // Read body for POST/PUT/PATCH
+  let body: string | undefined;
+  if (method !== "GET" && method !== "HEAD") {
+    try {
+      body = await request.text();
+    } catch {
+      // No body
+    }
+  }
+
+  // Add X-API-Key HMAC signature for registration endpoints
+  const needsSigning = SIGNED_PATHS.some((p) => apiPath === p);
+  if (needsSigning && body) {
+    const apiKeyValue = computeApiKeyHeader(method, body);
+    if (apiKeyValue) {
+      headers["X-API-Key"] = apiKeyValue;
+    }
+  }
+
   const fetchOptions: RequestInit = {
     method,
     headers,
   };
 
-  // Only include body for POST/PUT/PATCH
-  if (method !== "GET" && method !== "HEAD") {
-    try {
-      const body = await request.text();
-      if (body) {
-        fetchOptions.body = body;
-      }
-    } catch {
-      // No body
-    }
+  if (body) {
+    fetchOptions.body = body;
   }
 
   try {
