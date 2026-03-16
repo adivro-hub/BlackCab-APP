@@ -59,6 +59,7 @@ class SherbookClient {
 
     if (options?.captchaToken) {
       headers["X-Captcha-Token"] = options.captchaToken;
+      console.log(`[SherbookClient] Setting X-Captcha-Token for ${path}, token length: ${options.captchaToken.length}`);
     }
 
     const response = await fetch(`${this.baseUrl}${path}`, {

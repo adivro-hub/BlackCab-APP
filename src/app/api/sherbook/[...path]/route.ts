@@ -78,6 +78,11 @@ async function proxyRequest(
     }
   }
 
+  // Log captcha header presence for registration endpoints
+  if (SIGNED_PATHS.some((p) => apiPath === p)) {
+    console.log(`[Sherbook Proxy] /${apiPath} — X-Captcha-Token: ${captchaToken ? "present" : "MISSING"}`);
+  }
+
   // Add X-API-Key HMAC signature for registration endpoints
   const needsSigning = SIGNED_PATHS.some((p) => apiPath === p);
   if (needsSigning && body) {
