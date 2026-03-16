@@ -62,6 +62,7 @@ async function proxyRequest(
     "User-Agent": "Miiles/6.0.0 (iPhone; iOS 17.0; Scale/3.00)",
     "Accept": "application/json",
     "Accept-Language": "en-RO;q=1.0",
+    "API-VERSION": "2.7",
   };
 
   // Forward session token from header (sent by client) or cookie (fallback)
