@@ -74,14 +74,22 @@ async function proxyRequest(
 
   // Add X-API-Key HMAC signature for registration endpoints
   const needsSigning = SIGNED_PATHS.some((p) => apiPath === p);
-  if (needsSigning && body) {
-    const apiKeyValue = computeApiKeyHeader(method, body);
-    if (apiKeyValue) {
-      headers["X-API-Key"] = apiKeyValue;
-      console.log(`[Sherbook Proxy] /${apiPath} — X-API-Key: present (${apiKeyValue.substring(0, 20)}...)`);
-    } else {
-      console.warn(`[Sherbook Proxy] /${apiPath} — X-API-Key: MISSING (no credentials)`);
+  if (needsSigning) {
+    if (!body) {
+      return NextResponse.json(
+        { status: "SIGNING_ERROR", errorMessage: "Request body required for signed endpoints" },
+        { status: 400 }
+      );
     }
+    const apiKeyValue = computeApiKeyHeader(method, body);
+    if (!apiKeyValue) {
+      return NextResponse.json(
+        { status: "SIGNING_ERROR", errorMessage: "Server missing API signing credentials" },
+        { status: 500 }
+      );
+    }
+    headers["X-API-Key"] = apiKeyValue;
+    console.log(`[Sherbook Proxy] /${apiPath} — X-API-Key: ${apiKeyValue.substring(0, 20)}...`);
   }
 
   const fetchOptions: RequestInit = {
@@ -96,6 +104,10 @@ async function proxyRequest(
   try {
     const apiRes = await fetch(`${SHERBOOK_BASE}/${apiPath}`, fetchOptions);
     const data = await apiRes.text();
+
+    if (needsSigning) {
+      console.log(`[Sherbook Proxy] /${apiPath} — response ${apiRes.status}: ${data.substring(0, 200)}`);
+    }
 
     const response = new NextResponse(data, {
       status: apiRes.status,
