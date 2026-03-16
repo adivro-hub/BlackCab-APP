@@ -78,7 +78,6 @@ async function proxyRequest(
     const apiKeyValue = computeApiKeyHeader(method, body);
     if (apiKeyValue) {
       headers["X-API-Key"] = apiKeyValue;
-      headers["X-Captcha-Token"] = apiKeyValue;
       console.log(`[Sherbook Proxy] /${apiPath} — X-API-Key: present (${apiKeyValue.substring(0, 20)}...)`);
     } else {
       console.warn(`[Sherbook Proxy] /${apiPath} — X-API-Key: MISSING (no credentials)`);
