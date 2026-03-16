@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createHash, createHmac } from "crypto";
 
 const SHERBOOK_BASE =
-  process.env.SHERBOOK_API_URL || "https://beirut-master.sherlock.com/sherbook";
+  process.env.SHERBOOK_API_URL || "https://app.blackcab.ro/sherbook";
 
 // Paths that require X-API-Key HMAC signing
 const SIGNED_PATHS = [
