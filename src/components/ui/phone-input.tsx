@@ -95,7 +95,7 @@ export function PhoneInput({
           onClick={() => setIsOpen(!isOpen)}
           disabled={disabled}
           className={cn(
-            "flex items-center gap-1.5 rounded-l-xl px-3 py-2.5 text-sm font-medium",
+            "flex items-center gap-1.5 rounded-l-xl px-3 py-2.5 text-base font-medium",
             "border-r border-input bg-muted/30 hover:bg-muted/60 transition-colors",
             "focus:outline-none"
           )}
@@ -132,7 +132,7 @@ export function PhoneInput({
                 type="button"
                 onClick={() => handleCountrySelect(country)}
                 className={cn(
-                  "flex w-full items-center gap-3 px-3 py-2.5 text-sm transition-colors hover:bg-muted/60",
+                  "flex w-full items-center gap-3 px-3 py-2.5 text-base transition-colors hover:bg-muted/60",
                   selectedCountry.code === country.code && "bg-muted"
                 )}
               >

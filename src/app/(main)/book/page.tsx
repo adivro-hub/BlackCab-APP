@@ -84,12 +84,12 @@ export default function BookPage() {
           {/* Saved places */}
           <div className="mt-3 flex gap-2">
             <button className="flex flex-1 items-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2.5 text-left transition-all active:scale-[0.98]">
-              <span className="text-sm">🏠</span>
-              <span className="text-xs font-medium text-zinc-700">Home</span>
+              <span className="text-lg">🏠</span>
+              <span className="text-base font-medium text-zinc-700">Home</span>
             </button>
             <button className="flex flex-1 items-center gap-2 rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2.5 text-left transition-all active:scale-[0.98]">
-              <span className="text-sm">💼</span>
-              <span className="text-xs font-medium text-zinc-700">Work</span>
+              <span className="text-lg">💼</span>
+              <span className="text-base font-medium text-zinc-700">Work</span>
             </button>
           </div>
 
@@ -106,8 +106,8 @@ export default function BookPage() {
                     <Clock className="h-3.5 w-3.5 text-zinc-500" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-zinc-900">{dest.address}</p>
-                    <p className="truncate text-xs text-zinc-400">{dest.subtitle}</p>
+                    <p className="truncate text-[18px] font-medium leading-tight text-zinc-900">{dest.address}</p>
+                    <p className="truncate text-base text-zinc-400">{dest.subtitle}</p>
                   </div>
                 </button>
               ))}

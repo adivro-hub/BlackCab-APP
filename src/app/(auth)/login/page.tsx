@@ -61,7 +61,7 @@ function LoginContent() {
           <Car className="h-7 w-7" />
         </div>
         <h1 className="text-3xl font-semibold tracking-tight">Welcome back</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
+        <p className="mt-2 text-base text-muted-foreground">
           Sign in to your BlackCab account
         </p>
       </div>
@@ -70,20 +70,20 @@ function LoginContent() {
       <div className="rounded-2xl border border-white/60 bg-white/70 p-6 shadow-xl shadow-black/[0.03] backdrop-blur-xl dark:border-white/10 dark:bg-white/5">
         <form onSubmit={handleSubmit} className="space-y-5">
           {error && (
-            <div className="flex items-start gap-3 rounded-xl bg-red-50 p-3.5 text-sm text-red-700 dark:bg-red-950/50 dark:text-red-300">
+            <div className="flex items-start gap-3 rounded-xl bg-red-50 p-3.5 text-base text-red-700 dark:bg-red-950/50 dark:text-red-300">
               <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
               <span>{error}</span>
             </div>
           )}
           {settingsError && (
-            <div className="flex items-start gap-3 rounded-xl bg-amber-50 p-3.5 text-sm text-amber-700 dark:bg-amber-950/50 dark:text-amber-300">
+            <div className="flex items-start gap-3 rounded-xl bg-amber-50 p-3.5 text-base text-amber-700 dark:bg-amber-950/50 dark:text-amber-300">
               <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
               <span>Settings: {settingsError}</span>
             </div>
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="phone" className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+            <Label htmlFor="phone" className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
               Phone Number
             </Label>
             <PhoneInput
@@ -96,7 +96,7 @@ function LoginContent() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+            <Label htmlFor="password" className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
               Password
             </Label>
             <Input
@@ -114,7 +114,7 @@ function LoginContent() {
           <Button
             type="submit"
             disabled={isLoading}
-            className="h-11 w-full rounded-xl bg-gradient-to-r from-zinc-900 to-zinc-700 text-sm font-medium shadow-lg shadow-zinc-900/20 transition-all hover:shadow-xl hover:shadow-zinc-900/30 dark:from-white dark:to-zinc-200 dark:text-zinc-900"
+            className="h-11 w-full rounded-xl bg-gradient-to-r from-zinc-900 to-zinc-700 text-base font-medium shadow-lg shadow-zinc-900/20 transition-all hover:shadow-xl hover:shadow-zinc-900/30 dark:from-white dark:to-zinc-200 dark:text-zinc-900"
           >
             {isLoading ? (
               <span className="flex items-center gap-2">
@@ -132,7 +132,7 @@ function LoginContent() {
       </div>
 
       {/* Footer links */}
-      <div className="flex items-center justify-center gap-6 text-sm">
+      <div className="flex items-center justify-center gap-6 text-base">
         <Link
           href="/register"
           className="text-muted-foreground transition-colors hover:text-foreground"

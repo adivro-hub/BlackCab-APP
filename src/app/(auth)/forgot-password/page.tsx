@@ -39,7 +39,7 @@ export default function ForgotPasswordPage() {
             <CheckCircle2 className="h-7 w-7" />
           </div>
           <h1 className="text-3xl font-semibold tracking-tight">Check your phone</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
+          <p className="mt-2 text-base text-muted-foreground">
             A new password has been sent to {phone} via SMS.
           </p>
         </div>
@@ -47,7 +47,7 @@ export default function ForgotPasswordPage() {
         <div className="rounded-2xl border border-white/60 bg-white/70 p-6 shadow-xl shadow-black/[0.03] backdrop-blur-xl dark:border-white/10 dark:bg-white/5">
           <Button
             onClick={() => router.push("/login")}
-            className="h-11 w-full rounded-xl bg-gradient-to-r from-zinc-900 to-zinc-700 text-sm font-medium shadow-lg shadow-zinc-900/20 dark:from-white dark:to-zinc-200 dark:text-zinc-900"
+            className="h-11 w-full rounded-xl bg-gradient-to-r from-zinc-900 to-zinc-700 text-base font-medium shadow-lg shadow-zinc-900/20 dark:from-white dark:to-zinc-200 dark:text-zinc-900"
           >
             <span className="flex items-center gap-2">
               Go to Sign In
@@ -67,7 +67,7 @@ export default function ForgotPasswordPage() {
           <Car className="h-7 w-7" />
         </div>
         <h1 className="text-3xl font-semibold tracking-tight">Reset password</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
+        <p className="mt-2 text-base text-muted-foreground">
           We&apos;ll send a new password to your phone via SMS
         </p>
       </div>
@@ -76,14 +76,14 @@ export default function ForgotPasswordPage() {
       <div className="rounded-2xl border border-white/60 bg-white/70 p-6 shadow-xl shadow-black/[0.03] backdrop-blur-xl dark:border-white/10 dark:bg-white/5">
         <form onSubmit={handleSubmit} className="space-y-5">
           {error && (
-            <div className="flex items-start gap-3 rounded-xl bg-red-50 p-3.5 text-sm text-red-700 dark:bg-red-950/50 dark:text-red-300">
+            <div className="flex items-start gap-3 rounded-xl bg-red-50 p-3.5 text-base text-red-700 dark:bg-red-950/50 dark:text-red-300">
               <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
               <span>{error}</span>
             </div>
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="phone" className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+            <Label htmlFor="phone" className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
               Phone Number
             </Label>
             <PhoneInput
@@ -98,7 +98,7 @@ export default function ForgotPasswordPage() {
           <Button
             type="submit"
             disabled={isLoading}
-            className="h-11 w-full rounded-xl bg-gradient-to-r from-zinc-900 to-zinc-700 text-sm font-medium shadow-lg shadow-zinc-900/20 transition-all hover:shadow-xl hover:shadow-zinc-900/30 dark:from-white dark:to-zinc-200 dark:text-zinc-900"
+            className="h-11 w-full rounded-xl bg-gradient-to-r from-zinc-900 to-zinc-700 text-base font-medium shadow-lg shadow-zinc-900/20 transition-all hover:shadow-xl hover:shadow-zinc-900/30 dark:from-white dark:to-zinc-200 dark:text-zinc-900"
           >
             {isLoading ? (
               <span className="flex items-center gap-2">
@@ -119,7 +119,7 @@ export default function ForgotPasswordPage() {
       <div className="text-center">
         <Link
           href="/login"
-          className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
+          className="inline-flex items-center gap-1.5 text-base text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           Back to Sign In
