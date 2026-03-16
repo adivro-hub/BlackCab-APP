@@ -60,8 +60,7 @@ export async function checkRegistration(
 }
 
 export async function requestNewPassword(
-  phone: string,
-  captchaToken?: string
+  phone: string
 ): Promise<void> {
   const response = await apiClient.post<{ phone: string; device: ReturnType<typeof buildWebDeviceDto> }, { status?: string; errorMessage?: string }>(
     "/registration/password",
@@ -69,7 +68,7 @@ export async function requestNewPassword(
       phone,
       device: buildWebDeviceDto(),
     },
-    { skipAuth: true, captchaToken }
+    { skipAuth: true }
   );
 
   if (response.status !== "OK") {

@@ -56,12 +56,6 @@ async function proxyRequest(
     headers["SESSION-TOKEN"] = sessionToken;
   }
 
-  // Forward captcha token
-  const captchaToken = request.headers.get("X-Captcha-Token");
-  if (captchaToken) {
-    headers["X-Captcha-Token"] = captchaToken;
-  }
-
   // Forward JSESSIONID cookie
   const jsessionId = request.cookies.get("JSESSIONID")?.value;
   if (jsessionId) {
@@ -78,17 +72,16 @@ async function proxyRequest(
     }
   }
 
-  // Log captcha header presence for registration endpoints
-  if (SIGNED_PATHS.some((p) => apiPath === p)) {
-    console.log(`[Sherbook Proxy] /${apiPath} — X-Captcha-Token: ${captchaToken ? "present" : "MISSING"}`);
-  }
-
   // Add X-API-Key HMAC signature for registration endpoints
   const needsSigning = SIGNED_PATHS.some((p) => apiPath === p);
   if (needsSigning && body) {
     const apiKeyValue = computeApiKeyHeader(method, body);
     if (apiKeyValue) {
       headers["X-API-Key"] = apiKeyValue;
+      headers["X-Captcha-Token"] = apiKeyValue;
+      console.log(`[Sherbook Proxy] /${apiPath} — X-API-Key: present (${apiKeyValue.substring(0, 20)}...)`);
+    } else {
+      console.warn(`[Sherbook Proxy] /${apiPath} — X-API-Key: MISSING (no credentials)`);
     }
   }
 
