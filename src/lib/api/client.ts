@@ -44,7 +44,7 @@ class SherbookClient {
   async post<TReq, TRes>(
     path: string,
     body: TReq,
-    options?: { skipAuth?: boolean }
+    options?: { skipAuth?: boolean; captchaToken?: string }
   ): Promise<TRes> {
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
@@ -55,6 +55,10 @@ class SherbookClient {
       if (token) {
         headers["SESSION-TOKEN"] = token;
       }
+    }
+
+    if (options?.captchaToken) {
+      headers["X-Captcha-Token"] = options.captchaToken;
     }
 
     const response = await fetch(`${this.baseUrl}${path}`, {

@@ -56,6 +56,12 @@ async function proxyRequest(
     headers["SESSION-TOKEN"] = sessionToken;
   }
 
+  // Forward captcha token
+  const captchaToken = request.headers.get("X-Captcha-Token");
+  if (captchaToken) {
+    headers["X-Captcha-Token"] = captchaToken;
+  }
+
   // Forward JSESSIONID cookie
   const jsessionId = request.cookies.get("JSESSIONID")?.value;
   if (jsessionId) {

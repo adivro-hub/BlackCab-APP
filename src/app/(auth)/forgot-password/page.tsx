@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { requestNewPassword } from "@/lib/api/auth";
@@ -9,6 +9,17 @@ import { Label } from "@/components/ui/label";
 import { PhoneInput } from "@/components/ui/phone-input";
 import { Car, ArrowRight, ArrowLeft, CheckCircle2, AlertCircle } from "lucide-react";
 
+const RECAPTCHA_SITE_KEY = "6LdksrkrAAAAAJjlGLJx_xPuBU6bhfML2wlNEyfe";
+
+declare global {
+  interface Window {
+    grecaptcha: {
+      ready: (cb: () => void) => void;
+      execute: (siteKey: string, options: { action: string }) => Promise<string>;
+    };
+  }
+}
+
 export default function ForgotPasswordPage() {
   const router = useRouter();
   const [phone, setPhone] = useState("");
@@ -16,13 +27,35 @@ export default function ForgotPasswordPage() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = `https://www.google.com/recaptcha/api.js?render=${RECAPTCHA_SITE_KEY}`;
+    script.async = true;
+    document.head.appendChild(script);
+    return () => { document.head.removeChild(script); };
+  }, []);
+
+  const getCaptchaToken = useCallback(async (): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      window.grecaptcha.ready(async () => {
+        try {
+          const token = await window.grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: "password_recovery" });
+          resolve(token);
+        } catch (err) {
+          reject(err);
+        }
+      });
+    });
+  }, []);
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     setIsLoading(true);
 
     try {
-      await requestNewPassword(phone);
+      const captchaToken = await getCaptchaToken();
+      await requestNewPassword(phone, captchaToken);
       setSuccess(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to send password");
