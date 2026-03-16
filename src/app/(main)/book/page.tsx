@@ -47,7 +47,7 @@ export default function BookPage() {
   }, [detectLocation]);
 
   return (
-    <div className="relative flex h-[calc(100dvh-3.5rem-3.5rem)] flex-col md:h-[calc(100dvh-3.5rem)] md:flex-row">
+    <div className="relative flex h-[calc(100dvh-3.5rem)] flex-col md:flex-row">
       {/* Map — full background on mobile */}
       <div className="absolute inset-0 md:relative md:flex-1">
         <BookingMap pickupCoords={pickupCoords} />
@@ -69,9 +69,9 @@ export default function BookPage() {
 
           {/* Destination input */}
           <div className="relative">
-            <div className="absolute left-3 top-1/2 -translate-y-1/2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-full bg-red-100">
-                <MapPin className="h-3.5 w-3.5 text-red-600" />
+            <div className="absolute left-4 top-1/2 -translate-y-1/2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-red-100">
+                <MapPin className="h-4 w-4 text-red-600" />
               </div>
             </div>
             <input
@@ -79,10 +79,10 @@ export default function BookPage() {
               placeholder="Where to?"
               value={dropoff}
               onChange={(e) => setDropoff(e.target.value)}
-              className="h-12 w-full rounded-xl border border-zinc-200 bg-zinc-50 pl-13 pr-10 text-base outline-none transition-all placeholder:text-zinc-400 focus:border-zinc-400 focus:bg-white focus:ring-3 focus:ring-zinc-200"
+              className="h-14 w-full rounded-2xl border border-zinc-200 bg-zinc-50 pl-15 pr-12 text-base font-medium outline-none transition-all placeholder:text-zinc-400 focus:border-zinc-400 focus:bg-white focus:ring-3 focus:ring-zinc-200"
             />
-            <button className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400">
-              <Search className="h-4 w-4" />
+            <button className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400">
+              <Search className="h-5 w-5" />
             </button>
           </div>
 

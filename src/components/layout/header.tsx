@@ -20,8 +20,8 @@ export function Header() {
 
   return (
     <>
-      {/* Desktop header */}
-      <header className="sticky top-0 z-40 border-b border-white/60 bg-white/70 backdrop-blur-xl dark:border-white/10 dark:bg-zinc-900/70">
+      {/* Desktop header — hidden on mobile */}
+      <header className="sticky top-0 z-40 hidden border-b border-white/60 bg-white/70 backdrop-blur-xl md:block dark:border-white/10 dark:bg-zinc-900/70">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
           <Link href="/book" className="flex items-center gap-2.5">
             <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-zinc-900 to-zinc-700 text-white dark:from-white dark:to-zinc-200 dark:text-zinc-900">
