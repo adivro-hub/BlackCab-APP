@@ -20,14 +20,14 @@ export function buildWebDeviceDto(): DeviceDto {
   const deviceId = getOrCreateDeviceId();
   return {
     deviceId,
-    osId: "Android",
-    osVersion: "14",
+    osId: "iPhone OS",
+    osVersion: "17.0",
     appVersion: "3.15.3",
     appId: "com.haulmont.miiles",
     screenWidth: typeof window !== "undefined" ? window.screen.width : 390,
     screenHeight: typeof window !== "undefined" ? window.screen.height : 844,
     fingerprint: deviceId,
     imei: "",
-    type: "ANDROID" as DeviceDto["type"],
+    type: "IPHONE" as DeviceDto["type"],
   };
 }
