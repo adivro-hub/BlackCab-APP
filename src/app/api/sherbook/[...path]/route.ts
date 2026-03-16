@@ -101,13 +101,17 @@ async function proxyRequest(
     fetchOptions.body = body;
   }
 
+  const targetUrl = `${SHERBOOK_BASE}/${apiPath}`;
+  console.log(`[Sherbook Proxy] >>> ${method} ${targetUrl}`);
+  if (needsSigning && body) {
+    console.log(`[Sherbook Proxy] >>> body: ${body.substring(0, 300)}`);
+  }
+
   try {
-    const apiRes = await fetch(`${SHERBOOK_BASE}/${apiPath}`, fetchOptions);
+    const apiRes = await fetch(targetUrl, fetchOptions);
     const data = await apiRes.text();
 
-    if (needsSigning) {
-      console.log(`[Sherbook Proxy] /${apiPath} — response ${apiRes.status}: ${data.substring(0, 200)}`);
-    }
+    console.log(`[Sherbook Proxy] <<< ${method} /${apiPath} — HTTP ${apiRes.status}: ${data.substring(0, 500)}`);
 
     const response = new NextResponse(data, {
       status: apiRes.status,
@@ -122,7 +126,7 @@ async function proxyRequest(
 
     return response;
   } catch (error) {
-    console.error(`[Sherbook Proxy] ${method} /${apiPath} failed:`, error);
+    console.error(`[Sherbook Proxy] !!! ${method} /${apiPath} FETCH ERROR:`, error);
     return NextResponse.json(
       { status: "PROXY_ERROR", errorMessage: "Failed to reach Sherbook API" },
       { status: 502 }
