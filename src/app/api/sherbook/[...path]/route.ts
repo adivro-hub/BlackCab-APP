@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createHash, createHmac } from "crypto";
 
 const SHERBOOK_BASE =
-  process.env.SHERBOOK_API_URL || "https://beirut-master.sherlock.com/sherbook";
+  process.env.SHERBOOK_API_URL || "https://app.blackcab.ro/sherbook";
 
 // Paths that require X-API-Key HMAC signing
 const SIGNED_PATHS = [
@@ -56,6 +56,12 @@ async function proxyRequest(
     headers["SESSION-TOKEN"] = sessionToken;
   }
 
+  // Forward captcha token
+  const captchaToken = request.headers.get("X-Captcha-Token");
+  if (captchaToken) {
+    headers["X-Captcha-Token"] = captchaToken;
+  }
+
   // Forward JSESSIONID cookie
   const jsessionId = request.cookies.get("JSESSIONID")?.value;
   if (jsessionId) {
@@ -70,6 +76,11 @@ async function proxyRequest(
     } catch {
       // No body
     }
+  }
+
+  // Log captcha header presence for registration endpoints
+  if (SIGNED_PATHS.some((p) => apiPath === p)) {
+    console.log(`[Sherbook Proxy] /${apiPath} — X-Captcha-Token: ${captchaToken ? "present" : "MISSING"}`);
   }
 
   // Add X-API-Key HMAC signature for registration endpoints
