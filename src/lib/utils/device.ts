@@ -22,7 +22,7 @@ export function buildWebDeviceDto(): DeviceDto {
     deviceId,
     osId: "iPhone OS",
     osVersion: "17.0",
-    appVersion: "3.15.1",
+    appVersion: "3.15.0",
     appId: "com.haulmont.miiles",
     screenWidth: typeof window !== "undefined" ? window.screen.width : 390,
     screenHeight: typeof window !== "undefined" ? window.screen.height : 844,
