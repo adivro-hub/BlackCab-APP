@@ -74,15 +74,22 @@ async function proxyRequest(
 
   // Add X-API-Key HMAC signature for registration endpoints
   const needsSigning = SIGNED_PATHS.some((p) => apiPath === p);
-  if (needsSigning && body) {
-    const apiKeyValue = computeApiKeyHeader(method, body);
-    if (apiKeyValue) {
-      headers["X-API-Key"] = apiKeyValue;
-      headers["X-Captcha-Token"] = apiKeyValue;
-      console.log(`[Sherbook Proxy] /${apiPath} — X-API-Key: present (${apiKeyValue.substring(0, 20)}...)`);
-    } else {
-      console.warn(`[Sherbook Proxy] /${apiPath} — X-API-Key: MISSING (no credentials)`);
+  if (needsSigning) {
+    if (!body) {
+      return NextResponse.json(
+        { status: "SIGNING_ERROR", errorMessage: "Request body required for signed endpoints" },
+        { status: 400 }
+      );
     }
+    const apiKeyValue = computeApiKeyHeader(method, body);
+    if (!apiKeyValue) {
+      return NextResponse.json(
+        { status: "SIGNING_ERROR", errorMessage: "Server missing API signing credentials" },
+        { status: 500 }
+      );
+    }
+    headers["X-API-Key"] = apiKeyValue;
+    console.log(`[Sherbook Proxy] /${apiPath} — X-API-Key: ${apiKeyValue.substring(0, 20)}...`);
   }
 
   const fetchOptions: RequestInit = {
@@ -94,9 +101,17 @@ async function proxyRequest(
     fetchOptions.body = body;
   }
 
+  const targetUrl = `${SHERBOOK_BASE}/${apiPath}`;
+  console.log(`[Sherbook Proxy] >>> ${method} ${targetUrl}`);
+  if (needsSigning && body) {
+    console.log(`[Sherbook Proxy] >>> body: ${body.substring(0, 300)}`);
+  }
+
   try {
-    const apiRes = await fetch(`${SHERBOOK_BASE}/${apiPath}`, fetchOptions);
+    const apiRes = await fetch(targetUrl, fetchOptions);
     const data = await apiRes.text();
+
+    console.log(`[Sherbook Proxy] <<< ${method} /${apiPath} — HTTP ${apiRes.status}: ${data.substring(0, 500)}`);
 
     const response = new NextResponse(data, {
       status: apiRes.status,
@@ -111,7 +126,7 @@ async function proxyRequest(
 
     return response;
   } catch (error) {
-    console.error(`[Sherbook Proxy] ${method} /${apiPath} failed:`, error);
+    console.error(`[Sherbook Proxy] !!! ${method} /${apiPath} FETCH ERROR:`, error);
     return NextResponse.json(
       { status: "PROXY_ERROR", errorMessage: "Failed to reach Sherbook API" },
       { status: 502 }
